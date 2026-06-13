@@ -6,7 +6,7 @@
 }
 
 body {
-  background: url('https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=1920&q=80')
+  background: url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1920&q=80')
               no-repeat center center fixed;
   background-size: cover;
   color: #222;
@@ -73,7 +73,6 @@ button {
   transition: 0.3s ease;
 }
 
-/* Primary Button */
 .btn-primary {
   margin-top: 20px;
   width: 100%;
@@ -87,7 +86,6 @@ button {
   transform: translateY(-2px);
 }
 
-/* Secondary Button */
 .btn-secondary {
   padding: 8px 14px;
   background: #e8f5e9;
@@ -98,7 +96,6 @@ button {
   background: #c8e6c9;
 }
 
-/* Danger Button */
 .btn-danger {
   padding: 8px 14px;
   background: #d32f2f;
@@ -109,7 +106,6 @@ button {
   background: #b71c1c;
 }
 
-/* Success Button */
 .btn-success {
   padding: 8px 14px;
   background: #388e3c;
