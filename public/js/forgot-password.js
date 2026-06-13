@@ -48,14 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
       link: resetLink,
       to_name: user.username || 'User'
     }).catch(() => {
-      // Ignore email errors - we redirect to the reset page regardless
+      // Ignore email errors - the link below still works
     });
 
-    successMsg.textContent = 'Reset link generated! Redirecting...';
+    successMsg.innerHTML = `Reset link generated: <a href="${resetLink}">${resetLink}</a>`;
     successMsg.style.display = 'block';
 
-    setTimeout(() => {
-      window.location.href = resetLink;
-    }, 800);
+    btn.disabled = false;
+    btn.textContent = 'Send reset link';
   });
 });
