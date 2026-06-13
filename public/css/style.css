@@ -6,9 +6,7 @@
 }
 
 body {
-  background: url('https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?auto=format&fit=crop&w=1920&q=80')
-              no-repeat center center fixed;
-  background-size: cover;
+  background: #f3fff3;
   color: #222;
   min-height: 100vh;
 }
@@ -16,12 +14,10 @@ body {
 .container {
   max-width: 420px;
   margin: 60px auto;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: #fff;
   padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
 .container.wide {
@@ -29,11 +25,9 @@ body {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 22px;
   margin-bottom: 20px;
   color: #1b5e20;
-  text-align: center;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
 }
 
 label {
@@ -42,7 +36,6 @@ label {
   margin-bottom: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: #1b5e20;
 }
 
 input,
@@ -53,7 +46,6 @@ textarea {
   border: 1px solid #c8e6c9;
   border-radius: 4px;
   font-size: 14px;
-  background: rgba(255, 255, 255, 0.95);
 }
 
 input:focus,
@@ -61,7 +53,6 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: #2e7d32;
-  box-shadow: 0 0 5px rgba(46, 125, 50, 0.4);
 }
 
 button {
@@ -70,10 +61,9 @@ button {
   border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
-  transition: 0.3s ease;
 }
 
-/* Primary Button */
+/* Main Green Button */
 .btn-primary {
   margin-top: 20px;
   width: 100%;
@@ -84,7 +74,6 @@ button {
 
 .btn-primary:hover {
   background: #1b5e20;
-  transform: translateY(-2px);
 }
 
 /* Secondary Button */
@@ -98,7 +87,7 @@ button {
   background: #c8e6c9;
 }
 
-/* Danger Button */
+/* Red Delete Button */
 .btn-danger {
   padding: 8px 14px;
   background: #d32f2f;
@@ -109,7 +98,7 @@ button {
   background: #b71c1c;
 }
 
-/* Success Button */
+/* Success Green Button */
 .btn-success {
   padding: 8px 14px;
   background: #388e3c;
@@ -123,7 +112,7 @@ button {
 .error-msg {
   margin-top: 12px;
   padding: 10px;
-  background: rgba(255, 235, 238, 0.95);
+  background: #ffebee;
   color: #c62828;
   border-radius: 4px;
   font-size: 13px;
@@ -133,7 +122,7 @@ button {
 .success-msg {
   margin-top: 12px;
   padding: 10px;
-  background: rgba(232, 245, 233, 0.95);
+  background: #e8f5e9;
   color: #2e7d32;
   border-radius: 4px;
   font-size: 13px;
@@ -152,14 +141,14 @@ button {
 }
 
 .link-row a:hover {
-  text-decoration: underline;
+  color: #1b5e20;
 }
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .task-form {
@@ -168,49 +157,41 @@ button {
   gap: 8px;
   margin-bottom: 24px;
   padding: 16px;
-  background: rgba(241, 248, 241, 0.95);
+  background: #f1f8f1;
   border: 1px solid #c8e6c9;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .filters {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-  flex-wrap: wrap;
 }
 
 .filters button.active {
   background: #2e7d32;
-  color: white;
+  color: #fff;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 th {
-  background: #2e7d32;
-  color: white;
-  font-weight: 600;
+  background: #e8f5e9;
+  color: #1b5e20;
 }
 
 th,
 td {
   text-align: left;
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
   font-size: 14px;
 }
 
-tr:hover {
-  background: rgba(232, 245, 233, 0.7);
-}
-
+/* Status Colors */
 .status-badge {
   padding: 4px 8px;
   border-radius: 12px;
