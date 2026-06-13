@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: 'Segoe UI', Arial, sans-serif;
 }
-
 body {
   background: url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1920&q=80')
               no-repeat center center fixed;
@@ -12,7 +11,6 @@ body {
   color: #222;
   min-height: 100vh;
 }
-
 .container {
   max-width: 420px;
   margin: 60px auto;
@@ -23,11 +21,9 @@ body {
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
-
 .container.wide {
   max-width: 720px;
 }
-
 h1 {
   font-size: 24px;
   margin-bottom: 20px;
@@ -35,7 +31,6 @@ h1 {
   text-align: center;
   text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
 }
-
 label {
   display: block;
   margin-top: 14px;
@@ -44,7 +39,6 @@ label {
   font-weight: 600;
   color: #1b5e20;
 }
-
 input,
 select,
 textarea {
@@ -55,7 +49,6 @@ textarea {
   font-size: 14px;
   background: rgba(255, 255, 255, 0.95);
 }
-
 input:focus,
 select:focus,
 textarea:focus {
@@ -63,7 +56,6 @@ textarea:focus {
   border-color: #2e7d32;
   box-shadow: 0 0 5px rgba(46, 125, 50, 0.4);
 }
-
 button {
   cursor: pointer;
   border: none;
@@ -72,7 +64,6 @@ button {
   font-weight: 600;
   transition: 0.3s ease;
 }
-
 .btn-primary {
   margin-top: 20px;
   width: 100%;
@@ -80,42 +71,34 @@ button {
   background: #2e7d32;
   color: #fff;
 }
-
 .btn-primary:hover {
   background: #1b5e20;
   transform: translateY(-2px);
 }
-
 .btn-secondary {
   padding: 8px 14px;
   background: #e8f5e9;
   color: #1b5e20;
 }
-
 .btn-secondary:hover {
   background: #c8e6c9;
 }
-
 .btn-danger {
   padding: 8px 14px;
   background: #d32f2f;
   color: #fff;
 }
-
 .btn-danger:hover {
   background: #b71c1c;
 }
-
 .btn-success {
   padding: 8px 14px;
   background: #388e3c;
   color: #fff;
 }
-
 .btn-success:hover {
   background: #2e7d32;
 }
-
 .error-msg {
   margin-top: 12px;
   padding: 10px;
@@ -125,7 +108,6 @@ button {
   font-size: 13px;
   display: none;
 }
-
 .success-msg {
   margin-top: 12px;
   padding: 10px;
@@ -135,29 +117,24 @@ button {
   font-size: 13px;
   display: none;
 }
-
 .link-row {
   margin-top: 16px;
   font-size: 13px;
   text-align: center;
 }
-
 .link-row a {
   color: #2e7d32;
   text-decoration: none;
 }
-
 .link-row a:hover {
   text-decoration: underline;
 }
-
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
-
 .task-form {
   display: flex;
   flex-direction: column;
@@ -168,19 +145,16 @@ button {
   border: 1px solid #c8e6c9;
   border-radius: 8px;
 }
-
 .filters {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
   flex-wrap: wrap;
 }
-
 .filters button.active {
   background: #2e7d32;
   color: white;
 }
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -188,13 +162,11 @@ table {
   border-radius: 8px;
   overflow: hidden;
 }
-
 th {
   background: #2e7d32;
   color: white;
   font-weight: 600;
 }
-
 th,
 td {
   text-align: left;
@@ -202,11 +174,9 @@ td {
   border-bottom: 1px solid #ddd;
   font-size: 14px;
 }
-
 tr:hover {
   background: rgba(232, 245, 233, 0.7);
 }
-
 .status-badge {
   padding: 4px 8px;
   border-radius: 12px;
@@ -214,27 +184,22 @@ tr:hover {
   font-weight: 600;
   text-transform: capitalize;
 }
-
 .status-pending {
   background: #ffebee;
   color: #c62828;
 }
-
 .status-in-progress {
   background: #fff3cd;
   color: #856404;
 }
-
 .status-completed {
   background: #d4edda;
   color: #1b5e20;
 }
-
 .actions-cell {
   display: flex;
   gap: 6px;
 }
-
 .edit-row input,
 .edit-row select {
   margin: 0;
