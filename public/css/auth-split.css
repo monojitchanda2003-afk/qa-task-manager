@@ -1,0 +1,244 @@
+/* ── Split-layout auth pages ── */
+.split-body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  align-items: stretch;
+}
+
+.split-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* LEFT */
+.split-left {
+  flex: 0 0 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 48px 40px;
+}
+
+.split-form-wrap {
+  width: 100%;
+  max-width: 380px;
+}
+
+.brand-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #7c3aed;
+  margin-bottom: 32px;
+  letter-spacing: 0.3px;
+}
+
+.split-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
+  text-align: left;
+  text-shadow: none;
+}
+
+.split-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+.split-form-wrap label {
+  color: #374151;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 5px;
+}
+
+.split-form-wrap input[type="email"],
+.split-form-wrap input[type="text"],
+.split-form-wrap input[type="password"] {
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.split-form-wrap input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+  outline: none;
+}
+
+.password-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrap input {
+  width: 100%;
+  padding-right: 40px !important;
+}
+
+.toggle-pw {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.form-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  cursor: pointer;
+}
+
+.remember-label input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: #7c3aed;
+}
+
+.forgot-link {
+  font-size: 13px;
+  color: #7c3aed;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.btn-split-primary {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-split-primary:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+.split-form-wrap .link-row {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.split-form-wrap .link-row a {
+  color: #7c3aed;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.split-form-wrap .link-row a:hover {
+  text-decoration: underline;
+}
+
+/* RIGHT */
+.split-right {
+  flex: 1;
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 50%, #4c1d95 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.split-right::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  top: -100px;
+  right: -100px;
+}
+
+.split-right::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  bottom: -80px;
+  left: -60px;
+}
+
+.split-right-content {
+  text-align: center;
+  z-index: 1;
+  max-width: 400px;
+}
+
+.hero-svg {
+  width: 100%;
+  max-width: 340px;
+  margin-bottom: 28px;
+}
+
+.split-right-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.split-right-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+  }
+  .split-left {
+    flex: none;
+    padding: 40px 24px;
+  }
+  .split-right {
+    display: none;
+  }
+}
