@@ -1,98 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - QA Task Manager</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/auth-split.css" />
-</head>
-<body class="split-body">
-  <div class="split-container">
+<!-- Site Header -->
+<header class="site-header">
+  <h1>QA Task Manager</h1>
+  <p>For Selenium, Cypress & Playwright</p>
+</header>
 
-    <!-- LEFT: Form -->
-    <div class="split-left">
-      <div class="split-form-wrap">
-        <div class="brand-logo">✅ QA Task Manager</div>
-        <h1 class="split-title">Welcome back</h1>
-        <p class="split-subtitle">Please enter your details to sign in</p>
-
-        <form id="loginForm" novalidate>
-          <label for="email">Email address</label>
-          <input type="email" id="email" name="email" data-testid="login-email" placeholder="you@example.com" />
-
-          <label for="password">Password</label>
-          <div class="password-wrap">
-            <input type="password" id="password" name="password" data-testid="login-password" placeholder="••••••••" />
-            <span class="toggle-pw" onclick="togglePw('password', this)">👁</span>
-          </div>
-
-          <div class="form-row-between">
-            <label class="remember-label">
-              <input type="checkbox" id="remember" /> Remember for 30 days
-            </label>
-            <a href="/forgot-password.html" class="forgot-link">Forgot password?</a>
-          </div>
-
-          <button type="submit" class="btn-split-primary" id="loginBtn" data-testid="login-submit">Sign in</button>
-        </form>
-
-        <div class="error-msg" id="errorMsg" data-testid="login-error"></div>
-
-        <div class="link-row">
-          Don't have an account? <a href="/signup.html">Sign up</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Purple panel -->
-    <div class="split-right">
-      <div class="split-right-content">
-        <svg viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg" class="hero-svg">
-          <!-- Monitor -->
-          <rect x="110" y="160" width="180" height="120" rx="10" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-width="2"/>
-          <rect x="120" y="170" width="160" height="95" rx="6" fill="#7c3aed" fill-opacity="0.5"/>
-          <rect x="175" y="280" width="50" height="16" rx="4" fill="#fff" fill-opacity="0.3"/>
-          <rect x="160" y="296" width="80" height="6" rx="3" fill="#fff" fill-opacity="0.2"/>
-          <!-- Person -->
-          <circle cx="200" cy="130" r="32" fill="#c4b5fd"/>
-          <path d="M155 230 Q200 190 245 230 L255 310 H145 Z" fill="#7c3aed"/>
-          <path d="M168 230 Q155 260 148 290" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
-          <path d="M232 230 Q245 260 252 285" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
-          <!-- Check badge -->
-          <circle cx="155" cy="245" r="22" fill="#10b981"/>
-          <polyline points="145,245 153,253 167,237" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <!-- Floating icons -->
-          <rect x="40" y="60" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="55" y="83" font-size="16" fill="#fff">💬</text>
-          <rect x="316" y="80" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="330" y="103" font-size="16" fill="#fff">🔔</text>
-          <rect x="55" y="150" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="68" y="173" font-size="16" fill="#fff">📧</text>
-          <rect x="305" y="155" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="318" y="178" font-size="16" fill="#fff">🌐</text>
-          <rect x="30" y="230" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="44" y="253" font-size="16" fill="#fff">📋</text>
-          <rect x="326" y="230" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
-          <text x="340" y="253" font-size="16" fill="#fff">⚙️</text>
-          <!-- Dots -->
-          <circle cx="200" cy="340" r="5" fill="#fff" fill-opacity="0.6"/>
-          <circle cx="218" cy="340" r="5" fill="#fff" fill-opacity="0.3"/>
-          <circle cx="236" cy="340" r="5" fill="#fff" fill-opacity="0.3"/>
-        </svg>
-        <h2 class="split-right-title">Manage your QA tasks<br/>smarter & faster</h2>
-        <p class="split-right-sub">Track bugs, assign tasks and ship quality software with confidence.</p>
-      </div>
-    </div>
-
-  </div>
-  <script>
-    function togglePw(id, el) {
-      const inp = document.getElementById(id);
-      inp.type = inp.type === 'password' ? 'text' : 'password';
-      el.textContent = inp.type === 'password' ? '👁' : '🙈';
-    }
-  </script>
-  <script src="/js/login.js"></script>
-</body>
-</html>
+<!-- Nav Bar -->
+<nav class="site-nav">
+  <a href="#">Home</a>
+  <a href="#">Tasks</a>
+  <a href="#">Reports</a>
+  <a href="#">Blog</a>
+  <a href="#">Practice</a>
+</nav>
