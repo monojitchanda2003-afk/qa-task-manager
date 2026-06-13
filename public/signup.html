@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - QA Task Manager</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Create an Account</h1>
+    <form id="signupForm" novalidate>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" data-testid="signup-username" placeholder="3-20 characters" />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" data-testid="signup-email" placeholder="you@example.com" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" data-testid="signup-password" placeholder="At least 6 characters" />
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" data-testid="signup-confirm-password" />
+
+      <button type="submit" class="btn-primary" id="signupBtn" data-testid="signup-submit">Sign Up</button>
+    </form>
+
+    <div class="error-msg" id="errorMsg" data-testid="signup-error"></div>
+    <div class="success-msg" id="successMsg" data-testid="signup-success"></div>
+
+    <div class="link-row">
+      Already have an account? <a href="/login.html">Login here</a>
+    </div>
+  </div>
+
+  <script src="/js/signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+  color: #222;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 420px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.container.wide {
+  max-width: 720px;
+}
+
+h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #1a3c5e;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #1a73e8;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1558b0;
+}
+
+.btn-secondary {
+  padding: 8px 14px;
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-secondary:hover {
+  background: #cfcfcf;
+}
+
+.btn-danger {
+  padding: 8px 14px;
+  background: #e53935;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #c62828;
+}
+
+.btn-success {
+  padding: 8px 14px;
+  background: #2e7d32;
+  color: #fff;
+}
+
+.error-msg {
+  margin-top: 12px;
+  padding: 10px;
+  background: #fdecea;
+  color: #b3261e;
+  border-radius: 4px;
+  font-size: 13px;
+  display: none;
+}
+
+.success-msg {
+  margin-top: 12px;
+  padding: 10px;
+  background: #e6f4ea;
+  color: #1e7e34;
+  border-radius: 4px;
+  font-size: 13px;
+  display: none;
+}
+
+.link-row {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filters button.active {
+  background: #1a73e8;
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-pending { background: #fff3cd; color: #8a6d00; }
+.status-in-progress { background: #cfe2ff; color: #0a4eb3; }
+.status-completed { background: #d4edda; color: #1e7e34; }
+
+.actions-cell {
+  display: flex;
+  gap: 6px;
+}
+
+.edit-row input, .edit-row select {
+  margin: 0;
+}
