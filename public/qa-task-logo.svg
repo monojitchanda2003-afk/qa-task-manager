@@ -13,5 +13,5 @@
 
 <!-- QA Task text -->
 <text x="100" y="55" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="34" fill="#1f2937" letter-spacing="1">QA Task</text>
-<text x="101" y="78" font-family="'Segoe UI', Arial, sans-serif" font-weight="400" font-size="13" fill="#9ca3af" letter-spacing="0.5">Manage your QA tasks smarter</text>
+<text x="101" y="79" font-family="'Segoe UI', Arial, sans-serif" font-weight="500" font-size="15" fill="#6b7280" letter-spacing="0.4">Manage your QA tasks smarter</text>
 </svg>
