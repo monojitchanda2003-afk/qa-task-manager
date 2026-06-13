@@ -1,81 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up - QA Task</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign Up — QA Task Manager</title>
+  <link rel="stylesheet" href="/css/saas.css"/>
+  <link rel="stylesheet" href="/css/auth-split.css"/>
 </head>
-<body>
-  <div class="container">
-    <div style="text-align:center; margin-bottom:20px;">
-      <img src="qa-task-logo.svg" alt="QA Task Logo" style="height:50px;">
-    </div>
-    <h1>QA Task Manager</h1>
-    <p style="text-align:center; color:#555; margin-bottom:20px;">Create your free account and start tracking bugs and tasks.</p>
-
-    <div class="error-msg" id="errorMsg" data-testid="signup-error"></div>
-    <div class="success-msg" id="successMsg" data-testid="signup-success"></div>
-
-    <form id="signupForm" novalidate>
-      <label for="username">Username</label>
-      <div class="input-icon-wrap">
-        <span class="input-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </span>
-        <input type="text" id="username" name="username" data-testid="signup-username" placeholder="3–20 characters" />
-      </div>
-
-      <label for="email">Email address</label>
-      <div class="input-icon-wrap">
-        <span class="input-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-        </span>
-        <input type="email" id="email" name="email" data-testid="signup-email" placeholder="you@example.com" />
-      </div>
-
-      <label for="password">Password</label>
-      <div class="input-icon-wrap">
-        <span class="input-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
-        </span>
-        <input type="password" id="password" name="password" data-testid="signup-password" placeholder="At least 6 characters" class="pw-toggle-target" />
-        <span class="toggle-icon" onclick="togglePw('password', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        </span>
-      </div>
-
-      <label for="confirmPassword">Confirm Password</label>
-      <div class="input-icon-wrap">
-        <span class="input-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
-        </span>
-        <input type="password" id="confirmPassword" name="confirmPassword" data-testid="signup-confirm-password" placeholder="Re-enter password" class="pw-toggle-target" />
-        <span class="toggle-icon" onclick="togglePw('confirmPassword', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        </span>
-      </div>
-
-      <button type="submit" class="btn-primary" id="signupBtn" data-testid="signup-submit">Create account</button>
-    </form>
-
-    <div class="link-row">
-      Already have an account? <a href="/login.html">Sign in</a>
+<body class="split-body">
+<div id="loader" class="loader-overlay">
+  <div class="loader-spinner"></div>
+  <span style="font-size:13px;color:var(--text2)">Loading...</span>
+</div>
+<div class="split-container">
+  <div class="split-left">
+    <div class="split-form-wrap">
+      <div class="brand-logo">✅ QA Task Manager</div>
+      <h1 class="split-title">Create an account</h1>
+      <p class="split-subtitle">Start managing your QA tasks today</p>
+      <form id="signupForm" novalidate>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" data-testid="signup-username" placeholder="3–20 characters"/>
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" data-testid="signup-email" placeholder="you@example.com"/>
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input type="password" id="password" name="password" data-testid="signup-password" placeholder="At least 6 characters"/>
+          <span class="toggle-pw" onclick="togglePw('password',this)">👁</span>
+        </div>
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-wrap">
+          <input type="password" id="confirmPassword" name="confirmPassword" data-testid="signup-confirm-password" placeholder="Re-enter password"/>
+          <span class="toggle-pw" onclick="togglePw('confirmPassword',this)">👁</span>
+        </div>
+        <button type="submit" class="btn-split-primary" id="signupBtn" data-testid="signup-submit">Create account</button>
+      </form>
+      <div class="alert alert-error"   id="errorMsg"   data-testid="signup-error"   style="margin-top:12px;"></div>
+      <div class="alert alert-success" id="successMsg" data-testid="signup-success" style="margin-top:12px;"></div>
+      <div class="link-row" style="margin-top:20px;">Already have an account? <a href="/login.html">Sign in</a></div>
     </div>
   </div>
-
-  <script>
-    const EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
-    const EYE_OFF_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
-
-    function togglePw(id, el) {
-      const inp = document.getElementById(id);
-      const willShow = inp.type === 'password';
-      inp.type = willShow ? 'text' : 'password';
-      el.innerHTML = willShow ? EYE_OFF_ICON : EYE_ICON;
-    }
-  </script>
-  <script src="/js/signup.js"></script>
-</body>
-</html>
+  <div class="split-right">
+    <div class="split-right-content">
+      <svg viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg" class="hero-svg">
+        <rect x="110" y="160" width="180" height="120" rx="10" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-width="2"/>
+        <rect x="120" y="170" width="160" height="95" rx="6" fill="#7c3aed" fill-opacity="0.5"/>
+        <circle cx="200" cy="130" r="32" fill="#c4b5fd"/>
+        <path d="M155 230 Q200 190 245 230 L255 310 H145 Z" fill="#7c3aed"/>
+        <path d="M168 230 Q155 260 148 290" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M232 230 Q245 260 252 285" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <circle cx="155" cy="245" r="22" fill="#10b981"/>
+        <polyline points="145,245 153,253 167,237" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="40" y="60" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="55" y="83" font-size="16" fill="#fff">💬</text>
+        <rect x="316" y="80" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+        <text x="330" y="103" font-size="16" fill="#fff">🔔</text>
+        <circle cx="200" cy="340" r="5" fill="#fff" fill-opacity="0.6"/>
+        <circle cx="218" cy="340" r="5" fill="#fff" fill-opacity="0.3"/>
+      </svg>
+      <h2 class="split-right-title">Join QA engineers<br/>worldwide</h2>
+      <p class="split-right-sub">Create your free account and start tracking bugs and tasks in minutes.</p>
+    </div>
+  </div>
+</div>
+<script>
+  function togglePw(id,el){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';el.textContent=i.type==='password'?'👁':'🙈';}
+  (function(){const d=localStorage.getItem('qa-dark');if(d==='true')document.documentElement.setAttribute('data-theme','dark');})();
+</script>
+<script src="/js/shared.js"></script>
+<script src="/js/signup.js"></script>
+</body></html>
