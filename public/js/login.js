@@ -1,41 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Redirect to dashboard if already logged in
   if (localStorage.getItem('token')) {
     window.location.href = '/dashboard.html';
     return;
   }
-
   const form = document.getElementById('loginForm');
   const errorMsg = document.getElementById('errorMsg');
-
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     errorMsg.style.display = 'none';
-
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        errorMsg.textContent = data.error || 'Login failed';
-        errorMsg.style.display = 'block';
-        return;
-      }
-
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
+    const users = JSON.parse(localStorage.getItem('qa_users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    if (user) {
+      localStorage.setItem('token', 'local_' + Date.now());
+      localStorage.setItem('user', JSON.stringify(user));
       window.location.href = '/dashboard.html';
-    } catch (err) {
-      errorMsg.textContent = 'Network error. Please try again.';
+    } else {
+      errorMsg.textContent = 'Invalid email or password.';
       errorMsg.style.display = 'block';
     }
   });
