@@ -5,34 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up - QA Task Manager</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/auth-split.css" />
 </head>
-<body>
-  <div class="container">
-    <h1>Create an Account</h1>
-    <form id="signupForm" novalidate>
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" data-testid="signup-username" placeholder="3-20 characters" />
+<body class="split-body">
+  <div class="split-container">
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" data-testid="signup-email" placeholder="you@example.com" />
+    <!-- LEFT: Form -->
+    <div class="split-left">
+      <div class="split-form-wrap">
+        <div class="brand-logo">✅ QA Task Manager</div>
+        <h1 class="split-title">Create an account</h1>
+        <p class="split-subtitle">Start managing your QA tasks today</p>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" data-testid="signup-password" placeholder="At least 6 characters" />
+        <form id="signupForm" novalidate>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" data-testid="signup-username" placeholder="3–20 characters" />
 
-      <label for="confirmPassword">Confirm Password</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" data-testid="signup-confirm-password" />
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" data-testid="signup-email" placeholder="you@example.com" />
 
-      <button type="submit" class="btn-primary" id="signupBtn" data-testid="signup-submit">Sign Up</button>
-    </form>
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="password" name="password" data-testid="signup-password" placeholder="At least 6 characters" />
+            <span class="toggle-pw" onclick="togglePw('password', this)">👁</span>
+          </div>
 
-    <div class="error-msg" id="errorMsg" data-testid="signup-error"></div>
-    <div class="success-msg" id="successMsg" data-testid="signup-success"></div>
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-wrap">
+            <input type="password" id="confirmPassword" name="confirmPassword" data-testid="signup-confirm-password" placeholder="Re-enter password" />
+            <span class="toggle-pw" onclick="togglePw('confirmPassword', this)">👁</span>
+          </div>
 
-    <div class="link-row">
-      Already have an account? <a href="/login.html">Login here</a>
+          <button type="submit" class="btn-split-primary" id="signupBtn" data-testid="signup-submit">Create account</button>
+        </form>
+
+        <div class="error-msg" id="errorMsg" data-testid="signup-error"></div>
+        <div class="success-msg" id="successMsg" data-testid="signup-success"></div>
+
+        <div class="link-row">
+          Already have an account? <a href="/login.html">Sign in</a>
+        </div>
+      </div>
     </div>
-  </div>
 
+    <!-- RIGHT: Purple panel -->
+    <div class="split-right">
+      <div class="split-right-content">
+        <svg viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg" class="hero-svg">
+          <rect x="110" y="160" width="180" height="120" rx="10" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-width="2"/>
+          <rect x="120" y="170" width="160" height="95" rx="6" fill="#7c3aed" fill-opacity="0.5"/>
+          <rect x="175" y="280" width="50" height="16" rx="4" fill="#fff" fill-opacity="0.3"/>
+          <rect x="160" y="296" width="80" height="6" rx="3" fill="#fff" fill-opacity="0.2"/>
+          <circle cx="200" cy="130" r="32" fill="#c4b5fd"/>
+          <path d="M155 230 Q200 190 245 230 L255 310 H145 Z" fill="#7c3aed"/>
+          <path d="M168 230 Q155 260 148 290" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <path d="M232 230 Q245 260 252 285" stroke="#c4b5fd" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <circle cx="155" cy="245" r="22" fill="#10b981"/>
+          <polyline points="145,245 153,253 167,237" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="40" y="60" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="55" y="83" font-size="16" fill="#fff">💬</text>
+          <rect x="316" y="80" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="330" y="103" font-size="16" fill="#fff">🔔</text>
+          <rect x="55" y="150" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="68" y="173" font-size="16" fill="#fff">📧</text>
+          <rect x="305" y="155" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="318" y="178" font-size="16" fill="#fff">🌐</text>
+          <rect x="30" y="230" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="44" y="253" font-size="16" fill="#fff">📋</text>
+          <rect x="326" y="230" width="44" height="34" rx="8" fill="#fff" fill-opacity="0.15" stroke="#fff" stroke-opacity="0.4" stroke-width="1.5"/>
+          <text x="340" y="253" font-size="16" fill="#fff">⚙️</text>
+          <circle cx="200" cy="340" r="5" fill="#fff" fill-opacity="0.6"/>
+          <circle cx="218" cy="340" r="5" fill="#fff" fill-opacity="0.3"/>
+          <circle cx="236" cy="340" r="5" fill="#fff" fill-opacity="0.3"/>
+        </svg>
+        <h2 class="split-right-title">Join thousands of QA<br/>engineers worldwide</h2>
+        <p class="split-right-sub">Create your free account and start tracking bugs and tasks in minutes.</p>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function togglePw(id, el) {
+      const inp = document.getElementById(id);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      el.textContent = inp.type === 'password' ? '👁' : '🙈';
+    }
+  </script>
   <script src="/js/signup.js"></script>
 </body>
 </html>
