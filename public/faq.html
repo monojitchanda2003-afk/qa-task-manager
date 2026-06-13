@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>FAQ — QA Task Manager</title>
+  <link rel="stylesheet" href="/css/saas.css"/>
+  <link rel="stylesheet" href="/css/auth-split.css"/>
+</head>
+<body>
+<div id="loader" class="loader-overlay">
+  <div class="loader-spinner"></div>
+  <span style="font-size:13px;color:var(--text2)">Loading...</span>
+</div>
+<div id="navbar-placeholder"></div>
+<div class="page-wrap" style="max-width:760px;">
+  <div class="page-hero">
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about QA Task Manager.</p>
+  </div>
+  
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    What is QA Task Manager? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">QA Task Manager is a professional web application designed for QA engineers to create, track, and manage software testing tasks with a clean SaaS-style interface.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    How do I create an account? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">Click 'Sign Up' in the navbar, fill in your username, email and password (min 6 chars), then submit. You'll be redirected to the login page.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    How does Forgot Password work? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">Go to the login page and click 'Forgot password?'. Enter your registered email — a reset link will be generated and logged to the server (check Render logs). Click it to set a new password.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    Can I filter and search tasks? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">Yes! On the dashboard you can search tasks by title using the search bar, and filter by status: All, Pending, In Progress, or Completed.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    Is there a dark mode? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">Absolutely. Click the 🌙 icon in the navbar to toggle dark mode. Your preference is saved in localStorage so it persists across sessions.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    Is this project open source? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">Yes, the source code is available on GitHub. Feel free to fork it, star it, or use it as a reference for your own projects.</div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-q" onclick="toggleFaq(this)">
+    Who built this? <i class="chevron">▼</i>
+  </button>
+  <div class="faq-a">This application was built by Monojit Chanda as a portfolio project to demonstrate full-stack development and QA automation skills.</div>
+</div>
+  <div class="card" style="text-align:center;margin-top:32px;padding:32px;">
+    <h3 style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">Still have questions?</h3>
+    <p style="color:var(--text2);margin-bottom:16px;">We're happy to help. Reach out via the contact page.</p>
+    <a href="/contact.html" class="btn btn-green">Contact Us</a>
+  </div>
+</div>
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+<div id="footer-placeholder"></div>
+<script src="/js/shared.js"></script>
+</body></html>
