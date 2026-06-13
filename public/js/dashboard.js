@@ -1,175 +1,195 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    window.location.href = '/login.html';
-    return;
-  }
+  if (!localStorage.getItem('token')) { location.href = '/login.html'; return; }
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  document.getElementById('welcomeMsg').textContent = `Welcome, ${user.username || 'User'}`;
+  const el = id => document.getElementById(id);
 
-  const tableBody = document.getElementById('taskTableBody');
-  const emptyMsg = document.getElementById('emptyMsg');
-  const errorMsg = document.getElementById('errorMsg');
-  const successMsg = document.getElementById('successMsg');
-  const filterButtons = document.querySelectorAll('.filters button');
+  el('welcomeMsg').textContent = `👋 Welcome back, ${user.username || 'there'}!`;
 
+  // Form toggle
+  el('toggleFormBtn').addEventListener('click', () => {
+    const wrap = el('taskFormWrap');
+    const open = wrap.style.display === 'none';
+    wrap.style.display = open ? 'block' : 'none';
+    el('toggleFormBtn').textContent = open ? '✕ Close' : '+ Add Task';
+  });
+  el('cancelFormBtn').addEventListener('click', () => {
+    el('taskFormWrap').style.display = 'none';
+    el('toggleFormBtn').textContent = '+ Add Task';
+  });
+
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
+
+  let allTasks = [];
   let currentFilter = 'all';
-  let tasks = JSON.parse(localStorage.getItem('qa_tasks') || '[]');
+  let searchQuery = '';
 
-  function saveTasks() {
-    localStorage.setItem('qa_tasks', JSON.stringify(tasks));
+  async function loadTasks() {
+    try {
+      const res = await fetch('/api/tasks', { headers });
+      const data = await res.json();
+      allTasks = Array.isArray(data) ? data : (data.tasks || []);
+      renderStats();
+      renderTasks();
+    } catch (e) { console.error(e); }
   }
 
-  function showError(message) {
-    errorMsg.textContent = message;
-    errorMsg.style.display = 'block';
-    successMsg.style.display = 'none';
+  function renderStats() {
+    const total    = allTasks.length;
+    const pending  = allTasks.filter(t => t.status === 'pending').length;
+    const progress = allTasks.filter(t => t.status === 'in-progress').length;
+    const done     = allTasks.filter(t => t.status === 'completed').length;
+    const pct      = total ? Math.round((done / total) * 100) : 0;
+
+    el('statTotal').textContent   = total;
+    el('statPending').textContent = pending;
+    el('statProgress').textContent= progress;
+    el('statDone').textContent    = done;
+    el('progressBar').style.width = pct + '%';
+    el('progressPct').textContent = pct + '%';
+    el('progressLabel').textContent = `${total} total tasks`;
+    document.querySelector('.progress-labels span').textContent = `${done} completed`;
   }
 
-  function showSuccess(message) {
-    successMsg.textContent = message;
-    successMsg.style.display = 'block';
-    errorMsg.style.display = 'none';
-    setTimeout(() => { successMsg.style.display = 'none'; }, 2000);
-  }
+  function renderTasks() {
+    const filtered = allTasks.filter(t => {
+      const matchFilter = currentFilter === 'all' || t.status === currentFilter;
+      const matchSearch = t.title.toLowerCase().includes(searchQuery) ||
+                         (t.description || '').toLowerCase().includes(searchQuery);
+      return matchFilter && matchSearch;
+    });
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
+    const tbody = el('taskTableBody');
+    const empty = el('emptyState');
 
-  function escapeAttr(str) {
-    return String(str).replace(/"/g, '&quot;');
-  }
-
-  function loadTasks() {
-    tasks = JSON.parse(localStorage.getItem('qa_tasks') || '[]');
-    const filtered = currentFilter === 'all'
-      ? tasks
-      : tasks.filter(t => t.status === currentFilter);
-    renderTasks(filtered);
-  }
-
-  function renderTasks(list) {
-    tableBody.innerHTML = '';
-    if (!list || list.length === 0) {
-      emptyMsg.style.display = 'block';
+    if (!filtered.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
       return;
     }
-    emptyMsg.style.display = 'none';
-    list.forEach(task => {
-      const row = document.createElement('tr');
-      row.setAttribute('data-testid', `task-row-${task.id}`);
-      row.dataset.taskId = task.id;
-      row.innerHTML = `
-        <td data-testid="task-title-${task.id}">${escapeHtml(task.title)}</td>
-        <td data-testid="task-description-${task.id}">${escapeHtml(task.description || '')}</td>
-        <td><span class="status-badge status-${task.status}" data-testid="task-status-${task.id}">${task.status}</span></td>
-        <td class="actions-cell">
-          <button class="btn-secondary edit-btn" data-testid="edit-task-${task.id}" data-id="${task.id}">Edit</button>
-          <button class="btn-danger delete-btn" data-testid="delete-task-${task.id}" data-id="${task.id}">Delete</button>
+    empty.style.display = 'none';
+
+    tbody.innerHTML = filtered.map((t, i) => {
+      const badge = t.status === 'completed'
+        ? '<span class="badge badge-completed">✅ Completed</span>'
+        : t.status === 'in-progress'
+        ? '<span class="badge badge-progress">🔄 In Progress</span>'
+        : '<span class="badge badge-pending">⏳ Pending</span>';
+
+      return `<tr data-id="${t.id}">
+        <td style="color:var(--text3);font-size:12px;">#${i+1}</td>
+        <td style="font-weight:600;">${escHtml(t.title)}</td>
+        <td style="color:var(--text2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(t.description || '—')}</td>
+        <td>${badge}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-edit-sm" onclick="startEdit(${t.id})">✏️ Edit</button>
+            <button class="btn-danger-sm" onclick="deleteTask(${t.id})">🗑 Delete</button>
+          </div>
         </td>
-      `;
-      tableBody.appendChild(row);
-    });
-    attachRowHandlers();
+      </tr>`;
+    }).join('');
   }
 
-  function attachRowHandlers() {
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        if (!confirm('Delete this task?')) return;
-        tasks = tasks.filter(t => t.id !== id);
-        saveTasks();
-        showSuccess('Task deleted');
-        loadTasks();
-      });
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-id');
-        const row = tableBody.querySelector(`tr[data-task-id="${id}"]`);
-        startEdit(row, id);
-      });
-    });
-  }
-
-  function startEdit(row, id) {
-    const task = tasks.find(t => t.id === id);
-    if (!task) return;
-    row.classList.add('edit-row');
-    row.children[0].innerHTML = `<input type="text" data-testid="edit-title-${id}" value="${escapeAttr(task.title)}" />`;
-    row.children[1].innerHTML = `<input type="text" data-testid="edit-description-${id}" value="${escapeAttr(task.description || '')}" />`;
-    row.children[2].innerHTML = `
-      <select data-testid="edit-status-${id}">
-        <option value="pending" ${task.status === 'pending' ? 'selected' : ''}>Pending</option>
-        <option value="in-progress" ${task.status === 'in-progress' ? 'selected' : ''}>In Progress</option>
-        <option value="completed" ${task.status === 'completed' ? 'selected' : ''}>Completed</option>
-      </select>`;
-    row.children[3].innerHTML = `
-      <button class="btn-success save-btn" data-testid="save-task-${id}" data-id="${id}">Save</button>
-      <button class="btn-secondary cancel-btn" data-testid="cancel-edit-${id}">Cancel</button>`;
-    row.children[3].querySelector('.save-btn').addEventListener('click', () => saveEdit(id));
-    row.children[3].querySelector('.cancel-btn').addEventListener('click', () => loadTasks());
-  }
-
-  function saveEdit(id) {
-    const title = document.querySelector(`[data-testid="edit-title-${id}"]`).value.trim();
-    const description = document.querySelector(`[data-testid="edit-description-${id}"]`).value.trim();
-    const status = document.querySelector(`[data-testid="edit-status-${id}"]`).value;
-    if (!title) { showError('Title cannot be empty'); return; }
-    const idx = tasks.findIndex(t => t.id === id);
-    if (idx !== -1) {
-      tasks[idx] = { ...tasks[idx], title, description, status };
-      saveTasks();
-      showSuccess('Task updated');
-      loadTasks();
-    }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // Add task
-  document.getElementById('addTaskBtn').addEventListener('click', () => {
-    const title = document.getElementById('taskTitle').value.trim();
-    const description = document.getElementById('taskDescription').value.trim();
-    const status = document.getElementById('taskStatus').value;
-    if (!title) { showError('Title is required'); return; }
-    const newTask = {
-      id: 'task_' + Date.now(),
-      title,
-      description,
-      status,
-      createdAt: new Date().toISOString()
-    };
-    tasks.push(newTask);
-    saveTasks();
-    document.getElementById('taskTitle').value = '';
-    document.getElementById('taskDescription').value = '';
-    document.getElementById('taskStatus').value = 'pending';
-    showSuccess('Task added');
-    loadTasks();
+  el('addTaskBtn').addEventListener('click', async () => {
+    const title = el('taskTitle').value.trim();
+    const description = el('taskDescription').value.trim();
+    const status = el('taskStatus').value;
+    if (!title) { showMsg('errorMsg', 'Title is required.'); return; }
+
+    el('addTaskBtn').textContent = 'Adding...';
+    el('addTaskBtn').disabled = true;
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'POST', headers,
+        body: JSON.stringify({ title, description, status })
+      });
+      const data = await res.json();
+      if (!res.ok) { showMsg('errorMsg', data.error || 'Failed to add task.'); return; }
+      showMsg('successMsg', '✅ Task added!');
+      el('taskTitle').value = '';
+      el('taskDescription').value = '';
+      el('taskStatus').value = 'pending';
+      await loadTasks();
+    } catch(e) { showMsg('errorMsg', 'Network error.'); }
+    finally { el('addTaskBtn').textContent = 'Add Task'; el('addTaskBtn').disabled = false; }
   });
 
-  // Filters
-  filterButtons.forEach(btn => {
+  // Delete
+  window.deleteTask = async (id) => {
+    if (!confirm('Delete this task?')) return;
+    try {
+      await fetch(`/api/tasks/${id}`, { method: 'DELETE', headers });
+      await loadTasks();
+    } catch(e) { console.error(e); }
+  };
+
+  // Edit (inline)
+  window.startEdit = (id) => {
+    const task = allTasks.find(t => t.id === id);
+    if (!task) return;
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    row.innerHTML = `
+      <td style="color:var(--text3);font-size:12px;">#</td>
+      <td><input class="form-group input" value="${escHtml(task.title)}" id="eTitle${id}" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:13px;width:100%;"/></td>
+      <td><input class="form-group input" value="${escHtml(task.description||'')}" id="eDesc${id}" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:13px;width:100%;"/></td>
+      <td>
+        <select id="eSt${id}" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:13px;">
+          <option value="pending" ${task.status==='pending'?'selected':''}>⏳ Pending</option>
+          <option value="in-progress" ${task.status==='in-progress'?'selected':''}>🔄 In Progress</option>
+          <option value="completed" ${task.status==='completed'?'selected':''}>✅ Completed</option>
+        </select>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-save-sm" onclick="saveEdit(${id})">💾 Save</button>
+          <button class="btn-outline" style="padding:5px 10px;border-radius:6px;font-size:12px;" onclick="loadTasks()">✕</button>
+        </div>
+      </td>`;
+  };
+
+  window.saveEdit = async (id) => {
+    const title = document.getElementById(`eTitle${id}`).value.trim();
+    const description = document.getElementById(`eDesc${id}`).value.trim();
+    const status = document.getElementById(`eSt${id}`).value;
+    if (!title) return;
+    try {
+      await fetch(`/api/tasks/${id}`, {
+        method: 'PUT', headers,
+        body: JSON.stringify({ title, description, status })
+      });
+      await loadTasks();
+    } catch(e) { console.error(e); }
+  };
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      filterButtons.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentFilter = btn.getAttribute('data-filter');
-      loadTasks();
+      currentFilter = btn.dataset.filter;
+      renderTasks();
     });
   });
 
-  // Logout
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = '/login.html';
+  // Search
+  el('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    renderTasks();
   });
 
-  // Initial load
+  function showMsg(id, text) {
+    const e = el(id);
+    e.textContent = text;
+    e.style.display = 'block';
+    setTimeout(() => { e.style.display = 'none'; }, 3500);
+  }
+
   loadTasks();
 });
