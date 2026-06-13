@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Profile — QA Task Manager</title>
+  <link rel="stylesheet" href="/css/saas.css"/>
+  <link rel="stylesheet" href="/css/auth-split.css"/>
+</head>
+<body>
+<div id="loader" class="loader-overlay">
+  <div class="loader-spinner"></div>
+  <span style="font-size:13px;color:var(--text2)">Loading...</span>
+</div>
+<div id="navbar-placeholder"></div>
+<div class="page-wrap" style="max-width:760px;">
+  <div class="profile-header">
+    <div class="profile-avatar-lg" id="profileAvatar">?</div>
+    <div class="profile-info">
+      <h2 id="profileName">Loading...</h2>
+      <p id="profileEmail">—</p>
+      <p style="margin-top:6px;"><span class="tag">QA Engineer</span> <span class="tag">Active</span></p>
+    </div>
+  </div>
+  <div class="card">
+    <h3 class="card-title" style="margin-bottom:20px;">Account Details</h3>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Username</label>
+      <input type="text" id="puUsername" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Email Address</label>
+      <input type="email" id="puEmail" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Member Since</label>
+      <input type="text" id="puJoined" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+      <a href="/forgot-password.html" class="btn btn-outline">🔑 Change Password</a>
+      <button class="btn btn-outline" id="logoutBtn2" onclick="localStorage.clear();location.href='/login.html'">Logout</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (!user.username) { location.href = '/login.html'; return; }
+  const initials = user.username.slice(0,2).toUpperCase();
+  document.getElementById('profileAvatar').textContent = initials;
+  document.getElementById('profileName').textContent  = user.username;
+  document.getElementById('profileEmail').textContent = user.email;
+  document.getElementById('puUsername').value = user.username;
+  document.getElementById('puEmail').value    = user.email;
+  document.getElementById('puJoined').value   = 'Member since 2025';
+});
+</script>
+<div id="footer-placeholder"></div>
+<script src="/js/shared.js"></script>
+</body></html>
