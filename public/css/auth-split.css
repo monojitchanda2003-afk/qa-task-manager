@@ -1,7 +1,7 @@
 /* ── Split-layout auth pages ── */
 .split-body {
   margin: 0;
-  padding: 0;
+  padding-top: var(--navbar-h);
   min-height: 100vh;
   background: #f8fafc;
   display: flex;
