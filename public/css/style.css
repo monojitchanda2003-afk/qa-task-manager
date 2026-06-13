@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #eaf4ff;
+  background: #f3fff3;
   color: #222;
   min-height: 100vh;
 }
@@ -27,7 +27,7 @@ body {
 h1 {
   font-size: 22px;
   margin-bottom: 20px;
-  color: #1a3c5e;
+  color: #1b5e20;
 }
 
 label {
@@ -38,12 +38,21 @@ label {
   font-weight: 600;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #c8e6c9;
   border-radius: 4px;
   font-size: 14px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2e7d32;
 }
 
 button {
@@ -54,49 +63,57 @@ button {
   font-weight: 600;
 }
 
+/* Main Green Button */
 .btn-primary {
   margin-top: 20px;
   width: 100%;
   padding: 12px;
-  background: #1a73e8;
+  background: #2e7d32;
   color: #fff;
 }
 
 .btn-primary:hover {
-  background: #1558b0;
+  background: #1b5e20;
 }
 
+/* Secondary Button */
 .btn-secondary {
   padding: 8px 14px;
-  background: #e0e0e0;
-  color: #333;
+  background: #e8f5e9;
+  color: #1b5e20;
 }
 
 .btn-secondary:hover {
-  background: #cfcfcf;
+  background: #c8e6c9;
 }
 
+/* Red Delete Button */
 .btn-danger {
   padding: 8px 14px;
-  background: #e53935;
+  background: #d32f2f;
   color: #fff;
 }
 
 .btn-danger:hover {
-  background: #c62828;
+  background: #b71c1c;
 }
 
+/* Success Green Button */
 .btn-success {
   padding: 8px 14px;
-  background: #2e7d32;
+  background: #388e3c;
   color: #fff;
+}
+
+.btn-success:hover {
+  background: #2e7d32;
 }
 
 .error-msg {
   margin-top: 12px;
   padding: 10px;
-  background: #fdecea;
-  color: #b3261e;
+  background: #ffebee;
+  color: #c62828;
   border-radius: 4px;
   font-size: 13px;
   display: none;
@@ -105,8 +122,8 @@ button {
 .success-msg {
   margin-top: 12px;
   padding: 10px;
-  background: #e6f4ea;
-  color: #1e7e34;
+  background: #e8f5e9;
+  color: #2e7d32;
   border-radius: 4px;
   font-size: 13px;
   display: none;
@@ -116,6 +133,15 @@ button {
   margin-top: 16px;
   font-size: 13px;
   text-align: center;
+}
+
+.link-row a {
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.link-row a:hover {
+  color: #1b5e20;
 }
 
 .topbar {
@@ -131,8 +157,8 @@ button {
   gap: 8px;
   margin-bottom: 24px;
   padding: 16px;
-  background: #f9fafb;
-  border: 1px solid #e0e0e0;
+  background: #f1f8f1;
+  border: 1px solid #c8e6c9;
   border-radius: 6px;
 }
 
@@ -143,7 +169,7 @@ button {
 }
 
 .filters button.active {
-  background: #1a73e8;
+  background: #2e7d32;
   color: #fff;
 }
 
@@ -152,13 +178,20 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+th,
+td {
   text-align: left;
   padding: 10px;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
 
+/* Status Colors */
 .status-badge {
   padding: 4px 8px;
   border-radius: 12px;
@@ -167,15 +200,27 @@ th, td {
   text-transform: capitalize;
 }
 
-.status-pending { background: #fff3cd; color: #8a6d00; }
-.status-in-progress { background: #cfe2ff; color: #0a4eb3; }
-.status-completed { background: #d4edda; color: #1e7e34; }
+.status-pending {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.status-in-progress {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #1b5e20;
+}
 
 .actions-cell {
   display: flex;
   gap: 6px;
 }
 
-.edit-row input, .edit-row select {
+.edit-row input,
+.edit-row select {
   margin: 0;
 }
