@@ -1,13 +1,81 @@
-<!-- Site Header -->
-<header class="site-header">
-  <h1>QA Task Manager</h1>
-  <p>For Selenium, Cypress & Playwright</p>
-</header>
-<!-- Nav Bar -->
-<nav class="site-nav">
-  <a href="#">Home</a>
-  <a href="#">Tasks</a>
-  <a href="#">Reports</a>
-  <a href="#">Blog</a>
-  <a href="#">Practice</a>
-</nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Task</title>
+  <link rel="icon" type="image/svg+xml" href="qa-task-logo.svg">
+  <link rel="stylesheet" href="css/split-auth.css">
+</head>
+<body class="split-body">
+  <div class="split-container">
+    <div class="split-left">
+      <div class="split-form-wrap">
+        <div class="brand-logo">
+          <img src="qa-task-logo.svg" alt="QA Task Logo" style="height:40px;">
+        </div>
+        <h2 class="split-title">Welcome back</h2>
+        <p class="split-subtitle">Please enter your details to sign in</p>
+        <div id="errorMsg" class="error-msg"></div>
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input type="password" id="password" placeholder="••••••••">
+          <span class="toggle-pw" onclick="togglePw()">👁</span>
+        </div>
+        <div class="form-row-between">
+          <label class="remember-label">
+            <input type="checkbox"> Remember for 30 days
+          </label>
+          <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
+        </div>
+        <button class="btn-split-primary" onclick="doLogin()">Sign in</button>
+        <div class="link-row">
+          Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="split-right-content">
+        <svg class="hero-svg" viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="40" width="220" height="160" rx="12" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <rect x="80" y="65" width="180" height="12" rx="6" fill="rgba(255,255,255,0.3)"/>
+          <rect x="80" y="88" width="140" height="10" rx="5" fill="rgba(255,255,255,0.2)"/>
+          <rect x="80" y="108" width="160" height="10" rx="5" fill="rgba(255,255,255,0.2)"/>
+          <rect x="80" y="128" width="120" height="10" rx="5" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="170" cy="185" r="16" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <path d="M162 185 L167 190 L178 179" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3 class="split-right-title">Manage your QA tasks smarter & faster</h3>
+        <p class="split-right-sub">Track bugs, assign tasks and ship quality software with confidence.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    function togglePw() {
+      const p = document.getElementById('password');
+      p.type = p.type === 'password' ? 'text' : 'password';
+    }
+    function doLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const err = document.getElementById('errorMsg');
+      if (!email || !password) {
+        err.style.display = 'block';
+        err.textContent = 'Please fill in all fields.';
+        return;
+      }
+      const users = JSON.parse(localStorage.getItem('qa_users') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+      if (user) {
+        localStorage.setItem('qa_current_user', JSON.stringify(user));
+        window.location.href = 'dashboard.html';
+      } else {
+        err.style.display = 'block';
+        err.textContent = 'Invalid email or password.';
+      }
+    }
+  </script>
+</body>
+</html>
