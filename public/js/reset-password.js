@@ -15,7 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  form.addEventListener('submit', async (e) => {
+  // Look up the reset token in localStorage
+  const resets = JSON.parse(localStorage.getItem('qa_resets') || '{}');
+  const resetEntry = resets[token];
+
+  if (!resetEntry || Date.now() > resetEntry.expiry) {
+    errorMsg.textContent = 'Invalid or expired reset token. Please request a new reset link.';
+    errorMsg.style.display = 'block';
+    form.style.display = 'none';
+    return;
+  }
+
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
@@ -38,29 +49,28 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.textContent = 'Resetting...';
     btn.disabled = true;
 
-    try {
-      const res = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password })
-      });
+    // Update the user's password in qa_users
+    const users = JSON.parse(localStorage.getItem('qa_users') || '[]');
+    const userIndex = users.findIndex(u => u.email === resetEntry.email);
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        errorMsg.textContent = data.error || 'Reset failed.';
-        errorMsg.style.display = 'block';
-      } else {
-        successMsg.textContent = 'Password reset successfully! Redirecting to login...';
-        successMsg.style.display = 'block';
-        setTimeout(() => { window.location.href = '/login.html'; }, 2000);
-      }
-    } catch (err) {
-      errorMsg.textContent = 'Network error. Please try again.';
+    if (userIndex === -1) {
+      errorMsg.textContent = 'Account not found for this reset link.';
       errorMsg.style.display = 'block';
-    } finally {
       btn.textContent = 'Reset password';
       btn.disabled = false;
+      return;
     }
+
+    users[userIndex].password = password;
+    localStorage.setItem('qa_users', JSON.stringify(users));
+
+    // Invalidate the used reset token
+    delete resets[token];
+    localStorage.setItem('qa_resets', JSON.stringify(resets));
+
+    successMsg.textContent = 'Password reset successfully! Redirecting to login...';
+    successMsg.style.display = 'block';
+
+    setTimeout(() => { window.location.href = '/login.html'; }, 1500);
   });
 });

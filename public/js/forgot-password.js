@@ -38,27 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('qa_resets', JSON.stringify(resets));
 
     const resetLink = `${window.location.origin}/reset-password.html?token=${token}`;
-    alert(resetLink);
 
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
+    // Try sending the email in the background (best-effort, non-blocking)
     emailjs.send('service_q27f9d9', 'template_gf7ket9', {
       email: email,
       link: resetLink,
       to_name: user.username || 'User'
-    })
-    .then(() => {
-      successMsg.textContent = 'Reset link sent! Check your email.';
-      successMsg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Send reset link';
-    })
-    .catch(() => {
-      errorMsg.textContent = 'Failed to send email. Please try again.';
-      errorMsg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Send reset link';
+    }).catch(() => {
+      // Ignore email errors - we redirect to the reset page regardless
     });
+
+    successMsg.textContent = 'Reset link generated! Redirecting...';
+    successMsg.style.display = 'block';
+
+    setTimeout(() => {
+      window.location.href = resetLink;
+    }, 800);
   });
 });
