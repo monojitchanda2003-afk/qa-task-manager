@@ -1,0 +1,12 @@
+<svg width="100" height="100" viewBox="0 0 100 100" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>QA Task Favicon</title>
+
+<!-- Green square (top-left) -->
+<rect x="6" y="6" width="50" height="50" rx="12" fill="#43A047"/>
+
+<!-- Magenta/pink square (bottom-left) -->
+<rect x="14" y="50" width="50" height="50" rx="12" fill="#E91E8C"/>
+
+<!-- Blue square (right, overlapping both) -->
+<rect x="48" y="28" width="50" height="50" rx="12" fill="#3B82F6"/>
+</svg>
