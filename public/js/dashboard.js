@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       allTasks = Array.isArray(data) ? data : [];
       renderStats();
       renderTable();
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error('[DASH] loadTasks error:', e); }
   }
 
   function renderStats() {
@@ -33,30 +33,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     const inProg  = allTasks.filter(t => t.status === 'in-progress').length;
     const done    = allTasks.filter(t => t.status === 'completed').length;
     const pct     = total ? Math.round((done / total) * 100) : 0;
-    $('statTotal').textContent    = total;
-    $('statPending').textContent  = pending;
-    $('statProgress').textContent = inProg;
-    $('statDone').textContent     = done;
-    $('progressBar').style.width  = pct + '%';
-    $('progressPct').textContent  = pct + '%';
+    $('statTotal').textContent     = total;
+    $('statPending').textContent   = pending;
+    $('statProgress').textContent  = inProg;
+    $('statDone').textContent      = done;
+    $('progressBar').style.width   = pct + '%';
+    $('progressPct').textContent   = pct + '%';
     $('progressDone').textContent  = done + ' completed';
     $('progressTotal').textContent = total + ' total tasks';
   }
 
   function renderTable() {
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.toLowerCase().trim();
     const filtered = allTasks.filter(t => {
       const matchFilter = currentFilter === 'all' || t.status === currentFilter;
-      const matchSearch = !q || t.title.toLowerCase().includes(q) || (t.description||'').toLowerCase().includes(q);
+      const matchSearch = !q ||
+        t.title.toLowerCase().includes(q) ||
+        (t.description || '').toLowerCase().includes(q);
       return matchFilter && matchSearch;
     });
 
     const tbody = $('taskBody');
     const empty = $('emptyState');
 
-    if (!filtered.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-    empty.style.display = 'none';
+    if (!filtered.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      // Show different message when search has no results vs truly empty
+      const h3 = empty.querySelector('h3');
+      const p  = empty.querySelector('p');
+      if (q && allTasks.length > 0) {
+        h3.textContent = 'No matching tasks';
+        p.textContent  = `No tasks found for "${searchQuery}". Try a different search.`;
+      } else {
+        h3.textContent = 'No tasks yet';
+        p.textContent  = 'Create your first task to start tracking your QA work.';
+      }
+      return;
+    }
 
+    empty.style.display = 'none';
     tbody.innerHTML = filtered.map((t, i) => {
       const badge =
         t.status === 'completed'   ? '<span class="badge badge-completed">✅ Completed</span>' :
@@ -81,24 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ── Delete with inline confirm (no popup) ────────────────────────────────
-  window.confirmDelete = (id) => {
-    const actionsDiv = document.getElementById(`actions-${id}`);
-    if (!actionsDiv) return;
-    actionsDiv.innerHTML = `
-      <span style="font-size:13px;color:var(--gray);margin-right:4px;">Sure?</span>
-      <button class="btn-del"  onclick="doDelete(${id})">Yes, Delete</button>
-      <button class="btn-edit" onclick="loadTasks()">Cancel</button>`;
-  };
-
-  window.doDelete = async (id) => {
-    try {
-      await fetch(`/api/tasks/${id}`, { method: 'DELETE', headers: authHeaders });
-      await loadTasks();
-    } catch(e) { console.error(e); }
-  };
-
-  // ── Add Task ─────────────────────────────────────────────────────────────
+  // ── Add Task ──────────────────────────────────────────────────────────────
   $('toggleFormBtn').addEventListener('click', () => {
     const wrap = $('taskFormWrap');
     const open = wrap.style.display === 'none' || wrap.style.display === '';
@@ -115,24 +114,61 @@ document.addEventListener('DOMContentLoaded', async () => {
     const title       = $('taskTitle').value.trim();
     const description = $('taskDesc').value.trim();
     const status      = $('taskStatus').value;
+
     if (!title) { showAlert('errMsg', '⚠️ Task title is required.'); return; }
 
     $('addTaskBtn').textContent = 'Adding...';
     $('addTaskBtn').disabled    = true;
+
     try {
-      const res  = await fetch('/api/tasks', { method: 'POST', headers: authHeaders, body: JSON.stringify({ title, description, status }) });
+      const res  = await fetch('/api/tasks', {
+        method: 'POST', headers: authHeaders,
+        body: JSON.stringify({ title, description, status })
+      });
       const data = await res.json();
       if (!res.ok) { showAlert('errMsg', data.error || 'Failed to add task.'); return; }
+
+      // Reset form, clear search so new task is visible
       $('taskTitle').value  = '';
       $('taskDesc').value   = '';
       $('taskStatus').value = 'pending';
       $('taskFormWrap').style.display = 'none';
       $('toggleFormBtn').textContent  = '+ Add Task';
-      showAlert('okMsg', '✅ Task added!');
+
+      // Clear search & reset filter so task is always visible after adding
+      searchQuery   = '';
+      currentFilter = 'all';
+      $('searchInput').value = '';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+
+      showAlert('okMsg', '✅ Task added successfully!');
       await loadTasks();
-    } catch(e) { showAlert('errMsg', 'Network error.'); }
-    finally { $('addTaskBtn').textContent = 'Add Task'; $('addTaskBtn').disabled = false; }
+
+    } catch(e) {
+      showAlert('errMsg', 'Network error. Please try again.');
+    } finally {
+      $('addTaskBtn').textContent = 'Add Task';
+      $('addTaskBtn').disabled    = false;
+    }
   });
+
+  // ── Delete with inline confirm (no popup) ─────────────────────────────────
+  window.confirmDelete = (id) => {
+    const div = document.getElementById(`actions-${id}`);
+    if (!div) return;
+    div.innerHTML = `
+      <span style="font-size:13px;color:var(--gray);white-space:nowrap;">Sure?</span>
+      <button class="btn-del"  onclick="doDelete(${id})">Yes, Delete</button>
+      <button class="btn-edit" onclick="loadTasks()">Cancel</button>`;
+  };
+
+  window.doDelete = async (id) => {
+    try {
+      await fetch(`/api/tasks/${id}`, { method: 'DELETE', headers: authHeaders });
+      await loadTasks();
+    } catch(e) { console.error(e); }
+  };
 
   // ── Edit (inline) ─────────────────────────────────────────────────────────
   window.startEdit = (id) => {
@@ -165,12 +201,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const status      = document.getElementById(`eS${id}`)?.value;
     if (!title) return;
     try {
-      await fetch(`/api/tasks/${id}`, { method: 'PUT', headers: authHeaders, body: JSON.stringify({ title, description, status }) });
+      await fetch(`/api/tasks/${id}`, {
+        method: 'PUT', headers: authHeaders,
+        body: JSON.stringify({ title, description, status })
+      });
       await loadTasks();
     } catch(e) { console.error(e); }
   };
 
-  // ── Filters & Search ──────────────────────────────────────────────────────
+  // ── Filters ───────────────────────────────────────────────────────────────
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -180,15 +219,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // ── Search ────────────────────────────────────────────────────────────────
   $('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value.trim();
+    searchQuery = e.target.value;
     renderTable();
+  });
+
+  // Clear search with Escape key
+  $('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      searchQuery = '';
+      $('searchInput').value = '';
+      renderTable();
+    }
   });
 
   function showAlert(id, msg) {
     const el = $(id);
     if (!el) return;
-    el.textContent = msg; el.style.display = 'block';
+    el.textContent = msg;
+    el.style.display = 'block';
     setTimeout(() => { el.style.display = 'none'; }, 3000);
   }
 
