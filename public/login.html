@@ -14,21 +14,23 @@
     </div>
     <h1>QA Task Manager</h1>
     <p style="text-align:center; color:#555; margin-bottom:20px;">A simple app for practicing Manual, API, and Automation testing.</p>
-    <div id="errorMsg" class="error-msg"></div>
-    <label for="email">Email address</label>
-    <input type="email" id="email" placeholder="you@example.com">
-    <label for="password">Password</label>
-    <div class="password-wrap" style="position:relative;">
-      <input type="password" id="password" placeholder="••••••••" style="padding-right:40px;">
-      <span onclick="togglePw()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;">👁</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
-      <label style="display:flex;align-items:center;gap:6px;font-weight:400;color:#555;margin:0;">
-        <input type="checkbox" style="width:auto;"> Remember for 30 days
-      </label>
-      <a href="forgot-password.html" style="color:#2e7d32;font-size:13px;">Forgot password?</a>
-    </div>
-    <button class="btn-primary" onclick="doLogin()">Sign in</button>
+    <div id="errorMsg" class="error-msg" data-testid="login-error"></div>
+    <form id="loginForm" novalidate>
+      <label for="email">Email address</label>
+      <input type="email" id="email" data-testid="login-email" placeholder="you@example.com">
+      <label for="password">Password</label>
+      <div class="password-wrap" style="position:relative;">
+        <input type="password" id="password" data-testid="login-password" placeholder="••••••••" style="padding-right:40px;">
+        <span onclick="togglePw()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;">👁</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
+        <label style="display:flex;align-items:center;gap:6px;font-weight:400;color:#555;margin:0;">
+          <input type="checkbox" style="width:auto;"> Remember for 30 days
+        </label>
+        <a href="forgot-password.html" style="color:#2e7d32;font-size:13px;">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn" data-testid="login-submit">Sign in</button>
+    </form>
     <div class="link-row">
       Don't have an account? <a href="signup.html">Sign up</a>
     </div>
@@ -38,25 +40,7 @@
       const p = document.getElementById('password');
       p.type = p.type === 'password' ? 'text' : 'password';
     }
-    function doLogin() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const err = document.getElementById('errorMsg');
-      if (!email || !password) {
-        err.style.display = 'block';
-        err.textContent = 'Please fill in all fields.';
-        return;
-      }
-      const users = JSON.parse(localStorage.getItem('qa_users') || '[]');
-      const user = users.find(u => u.email === email && u.password === password);
-      if (user) {
-        localStorage.setItem('qa_current_user', JSON.stringify(user));
-        window.location.href = 'dashboard.html';
-      } else {
-        err.style.display = 'block';
-        err.textContent = 'Invalid email or password.';
-      }
-    }
   </script>
+  <script src="/js/login.js"></script>
 </body>
 </html>
