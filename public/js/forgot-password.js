@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('qa_resets', JSON.stringify(resets));
 
     const resetLink = `${window.location.origin}/reset-password.html?token=${token}`;
+    alert(resetLink);
 
     btn.disabled = true;
     btn.textContent = 'Sending...';
