@@ -17,11 +17,19 @@
     <div id="errorMsg" class="error-msg" data-testid="login-error"></div>
     <form id="loginForm" novalidate>
       <label for="email">Email address</label>
-      <input type="email" id="email" data-testid="login-email" placeholder="you@example.com">
+      <div class="input-icon-wrap">
+        <span class="input-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </span>
+        <input type="email" id="email" data-testid="login-email" placeholder="you@example.com">
+      </div>
       <label for="password">Password</label>
-      <div class="password-wrap" style="position:relative;">
-        <input type="password" id="password" data-testid="login-password" placeholder="••••••••" style="padding-right:40px;">
-        <span onclick="togglePw()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;">👁</span>
+      <div class="input-icon-wrap password-wrap">
+        <span class="input-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+        </span>
+        <input type="password" id="password" data-testid="login-password" placeholder="••••••••" class="pw-toggle-target">
+        <span class="toggle-icon" onclick="togglePw()">👁</span>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
         <label style="display:flex;align-items:center;gap:6px;font-weight:400;color:#555;margin:0;">
