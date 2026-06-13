@@ -4,137 +4,71 @@ const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
-const VALID_STATUSES = ['pending', 'in-progress', 'completed'];
-
-// All routes below require a valid JWT
+// All task routes require authentication
 router.use(authenticate);
 
-/**
- * GET /api/tasks
- * GET /api/tasks?status=pending
- */
+/** GET /api/tasks — get all tasks for logged-in user */
 router.get('/', (req, res) => {
   const db = readDB();
-  let tasks = db.tasks.filter(t => t.userId === req.user.id);
-
-  const { status } = req.query;
-  if (status) {
-    if (!VALID_STATUSES.includes(status)) {
-      return res.status(400).json({ error: `status must be one of: ${VALID_STATUSES.join(', ')}` });
-    }
-    tasks = tasks.filter(t => t.status === status);
-  }
-
-  return res.status(200).json({ count: tasks.length, tasks });
+  const tasks = (db.tasks || []).filter(t => t.userId === req.user.id);
+  res.json(tasks);
 });
 
-/**
- * GET /api/tasks/:id
- */
-router.get('/:id', (req, res) => {
-  const db = readDB();
-  const id = parseInt(req.params.id, 10);
-
-  if (Number.isNaN(id)) {
-    return res.status(400).json({ error: 'task id must be a number' });
-  }
-
-  const task = db.tasks.find(t => t.id === id && t.userId === req.user.id);
-  if (!task) {
-    return res.status(404).json({ error: 'task not found' });
-  }
-
-  return res.status(200).json({ task });
-});
-
-/**
- * POST /api/tasks
- * Body: { title, description?, status? }
- */
+/** POST /api/tasks — create a task */
 router.post('/', (req, res) => {
   const { title, description, status } = req.body || {};
-
-  if (!title || title.trim() === '') {
-    return res.status(400).json({ error: 'title is required' });
-  }
-  if (status && !VALID_STATUSES.includes(status)) {
-    return res.status(400).json({ error: `status must be one of: ${VALID_STATUSES.join(', ')}` });
-  }
+  if (!title || !title.trim())
+    return res.status(400).json({ error: 'Task title is required.' });
 
   const db = readDB();
+  if (!db.tasks) db.tasks = [];
+  if (!db.nextTaskId) db.nextTaskId = 1;
+
   const task = {
     id: db.nextTaskId,
     userId: req.user.id,
-    title,
-    description: description || '',
-    status: status || 'pending',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    title: title.trim(),
+    description: (description || '').trim(),
+    status: ['pending','in-progress','completed'].includes(status) ? status : 'pending',
+    createdAt: new Date().toISOString()
   };
 
   db.tasks.push(task);
   db.nextTaskId += 1;
   writeDB(db);
 
-  return res.status(201).json({ message: 'task created', task });
+  res.status(201).json(task);
 });
 
-/**
- * PUT /api/tasks/:id
- * Body: { title?, description?, status? }
- */
+/** PUT /api/tasks/:id — update a task */
 router.put('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
   const db = readDB();
-  const id = parseInt(req.params.id, 10);
+  const task = (db.tasks || []).find(t => t.id === id && t.userId === req.user.id);
 
-  if (Number.isNaN(id)) {
-    return res.status(400).json({ error: 'task id must be a number' });
-  }
-
-  const task = db.tasks.find(t => t.id === id && t.userId === req.user.id);
-  if (!task) {
-    return res.status(404).json({ error: 'task not found' });
-  }
+  if (!task) return res.status(404).json({ error: 'Task not found.' });
 
   const { title, description, status } = req.body || {};
-
-  if (status !== undefined && !VALID_STATUSES.includes(status)) {
-    return res.status(400).json({ error: `status must be one of: ${VALID_STATUSES.join(', ')}` });
-  }
-  if (title !== undefined) {
-    if (title.trim() === '') {
-      return res.status(400).json({ error: 'title cannot be empty' });
-    }
-    task.title = title;
-  }
-  if (description !== undefined) task.description = description;
-  if (status !== undefined) task.status = status;
+  if (title)       task.title       = title.trim();
+  if (description !== undefined) task.description = description.trim();
+  if (status && ['pending','in-progress','completed'].includes(status)) task.status = status;
   task.updatedAt = new Date().toISOString();
 
   writeDB(db);
-  return res.status(200).json({ message: 'task updated', task });
+  res.json(task);
 });
 
-/**
- * DELETE /api/tasks/:id
- */
+/** DELETE /api/tasks/:id — delete a task */
 router.delete('/:id', (req, res) => {
+  const id = parseInt(req.params.id);
   const db = readDB();
-  const id = parseInt(req.params.id, 10);
+  const index = (db.tasks || []).findIndex(t => t.id === id && t.userId === req.user.id);
 
-  if (Number.isNaN(id)) {
-    return res.status(400).json({ error: 'task id must be a number' });
-  }
-
-  const index = db.tasks.findIndex(t => t.id === id && t.userId === req.user.id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'task not found' });
-  }
+  if (index === -1) return res.status(404).json({ error: 'Task not found.' });
 
   db.tasks.splice(index, 1);
   writeDB(db);
-
-  return res.status(200).json({ message: 'task deleted' });
+  res.json({ message: 'Task deleted successfully.' });
 });
 
 module.exports = router;
