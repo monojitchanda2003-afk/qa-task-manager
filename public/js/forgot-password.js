@@ -42,19 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    // Try sending the email in the background (best-effort, non-blocking)
     emailjs.send('service_q27f9d9', 'template_gf7ket9', {
       email: email,
       link: resetLink,
       to_name: user.username || 'User'
-    }).catch(() => {
-      // Ignore email errors - the link below still works
+    })
+    .then(() => {
+      successMsg.textContent = 'Reset link sent! Please check your email inbox.';
+      successMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Send reset link';
+    })
+    .catch(() => {
+      errorMsg.textContent = 'Failed to send email. Please try again later.';
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Send reset link';
     });
-
-    successMsg.innerHTML = `Reset link generated: <a href="${resetLink}">${resetLink}</a>`;
-    successMsg.style.display = 'block';
-
-    btn.disabled = false;
-    btn.textContent = 'Send reset link';
   });
 });
