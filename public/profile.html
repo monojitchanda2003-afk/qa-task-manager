@@ -6,56 +6,281 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Profile — QA Task Manager</title>
   <link rel="stylesheet" href="/css/saas.css"/>
-  <link rel="stylesheet" href="/css/auth-split.css"/>
+  <style>
+    .avatar-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      flex-shrink: 0;
+    }
+    .avatar-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--green);
+      box-shadow: 0 4px 18px rgba(22,163,74,0.3);
+      display: none;
+    }
+    .avatar-initials {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 4px 18px rgba(22,163,74,0.3);
+    }
+    .avatar-upload-btn {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .avatar-upload-btn:hover {
+      background: var(--green-dark);
+      transform: scale(1.1);
+    }
+    #avatarInput { display: none; }
+
+    .avatar-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-upload {
+      padding: 8px 18px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-upload:hover { background: var(--green-dark); }
+    .btn-remove {
+      padding: 8px 18px;
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+    .btn-remove:hover { background: #dc2626; color: white; }
+
+    .profile-top {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .profile-top-info h2 { font-size: 22px; font-weight: 800; color: var(--dark); }
+    .profile-top-info p  { font-size: 14px; color: var(--gray); margin-top: 4px; }
+
+    .upload-hint {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 6px;
+    }
+    .success-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--green);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(22,163,74,0.4);
+      z-index: 9999;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 <div id="loader" class="loader-overlay">
   <div class="loader-spinner"></div>
-  <span style="font-size:13px;color:var(--text2)">Loading...</span>
 </div>
 <div id="navbar-placeholder"></div>
-<div class="page-wrap" style="max-width:760px;">
-  <div class="profile-header">
-    <div class="profile-avatar-lg" id="profileAvatar">?</div>
-    <div class="profile-info">
+
+<div style="max-width:760px;margin:0 auto;padding:32px 24px;">
+
+  <!-- Profile Top Card -->
+  <div class="profile-top">
+    <div class="avatar-wrap">
+      <!-- Profile picture (shown when uploaded) -->
+      <img id="avatarImg" class="avatar-img" src="" alt="Profile picture"/>
+      <!-- Initials fallback -->
+      <div class="avatar-initials" id="avatarInitials">?</div>
+      <!-- Camera button -->
+      <label class="avatar-upload-btn" for="avatarInput" title="Change photo">📷</label>
+      <input type="file" id="avatarInput" accept="image/*"/>
+    </div>
+
+    <div class="profile-top-info">
       <h2 id="profileName">Loading...</h2>
       <p id="profileEmail">—</p>
-      <p style="margin-top:6px;"><span class="tag">QA Engineer</span> <span class="tag">Active</span></p>
+      <p style="margin-top:8px;">
+        <span class="tag">QA Engineer</span>
+        <span class="tag">Active</span>
+      </p>
+      <div class="avatar-actions">
+        <button class="btn-upload" onclick="document.getElementById('avatarInput').click()">📷 Upload Photo</button>
+        <button class="btn-remove" id="removeBtn" onclick="removePhoto()">🗑 Remove Photo</button>
+      </div>
+      <p class="upload-hint">JPG, PNG or GIF · Max 2MB · Stored locally</p>
     </div>
   </div>
-  <div class="card">
+
+  <!-- Account Details Card -->
+  <div class="card" style="margin-bottom:20px;">
     <h3 class="card-title" style="margin-bottom:20px;">Account Details</h3>
     <div class="form-group" style="margin-bottom:14px;">
-      <label>Username</label>
-      <input type="text" id="puUsername" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+      <label class="auth-label">Username</label>
+      <input type="text" id="puUsername" class="auth-input" readonly
+             style="background:var(--gray-light);cursor:not-allowed;"/>
     </div>
     <div class="form-group" style="margin-bottom:14px;">
-      <label>Email Address</label>
-      <input type="email" id="puEmail" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+      <label class="auth-label">Email Address</label>
+      <input type="email" id="puEmail" class="auth-input" readonly
+             style="background:var(--gray-light);cursor:not-allowed;"/>
     </div>
-    <div class="form-group" style="margin-bottom:14px;">
-      <label>Member Since</label>
-      <input type="text" id="puJoined" readonly style="background:var(--surface2);cursor:not-allowed;"/>
+    <div class="form-group" style="margin-bottom:20px;">
+      <label class="auth-label">Member Since</label>
+      <input type="text" id="puJoined" class="auth-input" readonly
+             style="background:var(--gray-light);cursor:not-allowed;"/>
     </div>
-    <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
-      <a href="/forgot-password.html" class="btn btn-outline">🔑 Change Password</a>
-      <button class="btn btn-outline" id="logoutBtn2" onclick="localStorage.clear();location.href='/login.html'">Logout</button>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="/forgot-password.html" class="btn-green" style="text-decoration:none;padding:9px 18px;border-radius:8px;font-size:14px;">🔑 Change Password</a>
+      <button onclick="localStorage.clear();location.href='/login.html'"
+              style="padding:9px 18px;background:#fee2e2;color:#dc2626;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">
+        Logout
+      </button>
     </div>
   </div>
+
 </div>
+
+<!-- Toast notification -->
+<div class="success-toast" id="toast"></div>
+
+<div id="footer-placeholder"></div>
+<script src="/js/shared.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  if (!user.username) { location.href = '/login.html'; return; }
-  const initials = user.username.slice(0,2).toUpperCase();
-  document.getElementById('profileAvatar').textContent = initials;
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  if (!user) { location.href = '/login.html'; return; }
+
+  const PHOTO_KEY = `qa_photo_${user.email}`;
+
+  // Fill profile info
   document.getElementById('profileName').textContent  = user.username;
   document.getElementById('profileEmail').textContent = user.email;
   document.getElementById('puUsername').value = user.username;
   document.getElementById('puEmail').value    = user.email;
   document.getElementById('puJoined').value   = 'Member since 2025';
+  document.getElementById('avatarInitials').textContent = user.username.slice(0,2).toUpperCase();
+
+  // Load saved photo
+  loadPhoto();
+
+  function loadPhoto() {
+    const saved = localStorage.getItem(PHOTO_KEY);
+    const img      = document.getElementById('avatarImg');
+    const initials = document.getElementById('avatarInitials');
+    const removeBtn= document.getElementById('removeBtn');
+
+    if (saved) {
+      img.src = saved;
+      img.style.display      = 'block';
+      initials.style.display = 'none';
+      removeBtn.style.display = 'inline-block';
+
+      // Also update navbar avatar if present
+      updateNavbarAvatar(saved);
+    } else {
+      img.style.display      = 'none';
+      initials.style.display = 'flex';
+      removeBtn.style.display = 'none';
+    }
+  }
+
+  function updateNavbarAvatar(src) {
+    const navAvatar = document.querySelector('.user-avatar');
+    if (!navAvatar) return;
+    navAvatar.innerHTML = `<img src="${src}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="avatar"/>`;
+  }
+
+  // Handle file upload
+  document.getElementById('avatarInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('❌ Image must be under 2MB', '#dc2626');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target.result;
+      localStorage.setItem(PHOTO_KEY, base64);
+      loadPhoto();
+      showToast('✅ Profile photo updated!');
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // reset input
+  });
+
+  // Remove photo
+  window.removePhoto = () => {
+    localStorage.removeItem(PHOTO_KEY);
+    loadPhoto();
+    showToast('🗑 Photo removed');
+  };
+
+  function showToast(msg, bg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = bg || '#16a34a';
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 2500);
+  }
 });
 </script>
-<div id="footer-placeholder"></div>
-<script src="/js/shared.js"></script>
-</body></html>
+</body>
+</html>
