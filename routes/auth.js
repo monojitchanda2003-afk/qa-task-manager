@@ -80,11 +80,16 @@ router.post('/forgot-password', (req, res) => {
   writeDB(db);
 
   // In production, send an email here using nodemailer.
-  // For now, we log the reset link to server console.
+  // For now, we log the reset link to server console AND return the token
+  // so the frontend can send it via EmailJS (this is a portfolio/demo app).
   const resetLink = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
   console.log(`\n[PASSWORD RESET] User: ${user.email}\nReset Link: ${resetLink}\n`);
 
-  return res.status(200).json({ message: 'If that email is registered, a reset link has been sent.' });
+  return res.status(200).json({
+    message: 'If that email is registered, a reset link has been sent.',
+    resetToken,
+    username: user.username
+  });
 });
 
 /** POST /api/auth/reset-password */

@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const successMsg = document.getElementById('successMsg');
   const btn = document.getElementById('forgotBtn');
 
-  form.addEventListener('submit', (e) => {
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
@@ -18,46 +20,56 @@ document.addEventListener('DOMContentLoaded', () => {
       errorMsg.style.display = 'block';
       return;
     }
-
-    const users = JSON.parse(localStorage.getItem('qa_users') || '[]');
-    const user = users.find(u => u.email === email);
-
-    if (!user) {
-      errorMsg.textContent = 'No account found with this email.';
+    if (!EMAIL_REGEX.test(email)) {
+      errorMsg.textContent = 'Please enter a valid email address.';
       errorMsg.style.display = 'block';
       return;
     }
 
-    // Generate reset token
-    const token = 'reset_' + Date.now() + '_' + Math.random().toString(36).substr(2);
-    const expiry = Date.now() + 3600000; // 1 hour
-
-    // Save reset token
-    const resets = JSON.parse(localStorage.getItem('qa_resets') || '{}');
-    resets[token] = { email, expiry };
-    localStorage.setItem('qa_resets', JSON.stringify(resets));
-
-    const resetLink = `${window.location.origin}/reset-password.html?token=${token}`;
-
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    emailjs.send('service_q27f9d9', 'template_gf7ket9', {
-      email: email,
-      link: resetLink,
-      to_name: user.username || 'User'
-    })
-    .then(() => {
-      successMsg.textContent = 'Reset link sent! Please check your email inbox.';
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorMsg.textContent = data.error || 'Something went wrong. Please try again.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // If a resetToken came back, the email exists - send the reset email.
+      if (data.resetToken) {
+        const resetLink = `${window.location.origin}/reset-password.html?token=${data.resetToken}`;
+
+        try {
+          await emailjs.send('service_q27f9d9', 'template_gf7ket9', {
+            email: email,
+            link: resetLink,
+            to_name: data.username || 'User'
+          });
+        } catch (emailErr) {
+          // Email sending failed, but don't reveal account existence either way.
+          console.error('Email send failed:', emailErr);
+        }
+      }
+
+      // Generic message regardless, to avoid revealing whether the email is registered.
+      successMsg.textContent = 'If that email is registered, a reset link has been sent. Please check your inbox.';
       successMsg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Send reset link';
-    })
-    .catch(() => {
-      errorMsg.textContent = 'Failed to send email. Please try again later.';
+
+    } catch (err) {
+      errorMsg.textContent = 'Network error. Please try again.';
       errorMsg.style.display = 'block';
+    } finally {
       btn.disabled = false;
       btn.textContent = 'Send reset link';
-    });
+    }
   });
 });
